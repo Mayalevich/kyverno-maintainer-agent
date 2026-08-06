@@ -1,0 +1,122 @@
+[
+  {
+    "number": 14621,
+    "title": "fix: wildcard-policy-new-cr-match",
+    "idle_days": 117,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 15695,
+    "title": "refactor: decouple polex source/compiler",
+    "idle_days": 111,
+    "mergeable": "CONFLICTING",
+    "is_draft": true,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 15037,
+    "title": "fix/jmespath-expression-not-allowed",
+    "idle_days": 106,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 15508,
+    "title": "chore: move back to dockerhub in chainsaw tests",
+    "idle_days": 104,
+    "mergeable": "MERGEABLE",
+    "is_draft": true,
+    "review": ""
+  },
+  {
+    "number": 15978,
+    "title": "update blocklist to allow in-cluster HTTP calls (Cherry-pick #15973)",
+    "idle_days": 100,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": ""
+  },
+  {
+    "number": 16027,
+    "title": "fix: remove hard-wiring of v1alpha1 map informers (#15799)",
+    "idle_days": 91,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": ""
+  },
+  {
+    "number": 14904,
+    "title": "fix(cli:test): make results.rule act as a filter",
+    "idle_days": 86,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16294,
+    "title": "contain policy name when writing pulled oci policies",
+    "idle_days": 17,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 15633,
+    "title": "fix: enable hook-delete-policy on migrate-resources post-upgrade Job",
+    "idle_days": 17,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 14883,
+    "title": "Implicitly ignore DELETE operations for all rule types and configs",
+    "idle_days": 17,
+    "mergeable": "MERGEABLE",
+    "is_draft": true,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16672,
+    "title": "perf: cache default manifest verification config",
+    "idle_days": 16,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16690,
+    "title": "fix: deduplicate redundant SubjectAccessReview checks during policy validation",
+    "idle_days": 15,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16711,
+    "title": "fix: ignore empty bracket patches in JoinPatches",
+    "idle_days": 13,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16702,
+    "title": "fix: enforce policy and rule matching in policy exception selector",
+    "idle_days": 13,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  },
+  {
+    "number": 16714,
+    "title": "fix: make git policy file extension check case-insensitive",
+    "idle_days": 13,
+    "mergeable": "MERGEABLE",
+    "is_draft": false,
+    "review": "REVIEW_REQUIRED"
+  }
+]
