@@ -109,6 +109,10 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--repo", default="kyverno/kyverno")
     e.add_argument("--per-label", type=int, default=60)
 
+    lc = sub.add_parser("lifecycle", help="measure real PR merge-time (grounds thresholds)")
+    lc.add_argument("--repo", default="kyverno/kyverno")
+    lc.add_argument("--limit", type=int, default=300)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "fetch":
@@ -126,6 +130,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "eval":
         from .eval_triage import run_eval
         return run_eval(args.repo, args.per_label)
+    if args.cmd == "lifecycle":
+        return hy.run_lifecycle(args.repo, args.limit)
     return _run_review()
 
 

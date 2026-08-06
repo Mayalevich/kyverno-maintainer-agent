@@ -91,6 +91,14 @@ awaited review past a threshold, **nudge the author** when it's very stale. On
 real Kyverno PRs it flagged five stale 86–117 days and four awaiting review
 14–17 days — the exact PRs a maintainer would want surfaced.
 
+**The thresholds aren't guessed** (`python -m maintainer_agent lifecycle`,
+`samples/pr_lifecycle.md`). Measured on **300** merged Kyverno PRs, half merge in
+under a day, **84% within 14 days**, **95% within 45** (p95 = 47.5d). So the
+14-day soft-nudge and 45-day author-nudge thresholds are read straight off the
+tail of the real merge-time distribution: a PR idle past 14 days is already slower
+than ~84% of everything that merges, and past 45 days it's in the slowest few
+percent.
+
 ## Quickstart
 ```bash
 python -m maintainer_agent fetch --repo kyverno/kyverno   # cache real dep PRs (uses gh auth)
@@ -99,6 +107,7 @@ python -m maintainer_agent agent --model qwen2.5:7b       # LLM agent + safety g
 python -m maintainer_agent triage                         # issue triage on live issues
 python -m maintainer_agent hygiene                        # PR-hygiene scan on live PRs
 python -m maintainer_agent eval                           # backtest triage vs real labels
+python -m maintainer_agent lifecycle                      # measure real merge-time -> thresholds
 ```
 Every deterministic path needs no LLM; the agent adds the autonomous layer on the
 one workflow where a wrong call is dangerous (auto-merge).
@@ -110,7 +119,7 @@ one workflow where a wrong call is dangerous (auto-merge).
 - **Every safety decision is deterministic and unit-tested** (`bump.py`,
   `policy.py`, `triage.py`, `hygiene.py`) — verifiable and reproducible, not a
   model guess, and the triage rules are **backtested against real maintainer
-  labels (94% precision) and real duplicate pairs (2/3 recall)**. **23 tests.**
+  labels (94% precision) and real duplicate pairs (2/3 recall)**. **24 tests.**
 - **Reproducible:** data is cached to `samples/`; LLM calls use a fixed seed;
   `idle_days` is frozen at fetch time.
 - Reuses the tool-calling agent pattern and Claude-Code-style skill I built for a
