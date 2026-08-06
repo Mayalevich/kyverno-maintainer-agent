@@ -1,0 +1,23 @@
+{
+  "_source": "Real kyverno/kyverno duplicates, recovered from maintainer 'Duplicate of #N' closing comments (issue-comments API). Ground truth for the duplicate-detector backtest.",
+  "pairs": [
+    {
+      "dup": 16724,
+      "canonical": 16720,
+      "dup_title": "Vulnerability detected: CVE-2026-49834 (medium)",
+      "canonical_title": "Vulnerability detected: CVE-2026-49834 (medium)"
+    },
+    {
+      "dup": 16850,
+      "canonical": 16849,
+      "dup_title": "Bug: Goroutine leak in aggregate report controller",
+      "canonical_title": "Bug: Goroutine leak in aggregate report controller"
+    },
+    {
+      "dup": 16523,
+      "canonical": 15286,
+      "dup_title": "[Bug] Admission controller fails to process NamespacedImageValidationPolicy",
+      "canonical_title": "[Bug] NamespacedImageValidatingPolicy failed to call webhook"
+    }
+  ]
+}

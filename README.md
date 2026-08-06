@@ -71,6 +71,18 @@ backtest exposed — image issues grabbed by the CLI rule — was fixed by reord
 the rules, taking precision from 92% to 94%; a test locks the number in so it
 can't silently regress.
 
+**The duplicate detector is grounded too.** I recovered **3 real duplicate pairs**
+from Kyverno's "Duplicate of #N" closing comments (issue-comments API) and
+backtested against them: the title-overlap detector recalls **2/3**, and stays
+selective — across 164 distinct issues it raises only two flags, both genuine
+near-duplicates (a recurring CLI MutatingPolicy bug, a repeated workflow-failure
+template), not noise. The one miss is honest and instructive: #16523 vs #15286
+are the same bug worded differently ("fails to process
+NamespacedImageValidationPolicy" vs "NamespacedImageValidatingPolicy failed to
+call webhook") and share no title tokens — lexical overlap *cannot* catch that, so
+embedding-based retrieval is the motivated next step (and retrieval is my
+background).
+
 ## Workflow 3 — PR hygiene
 `hygiene.py` scans open PRs oldest-first (a hygiene tool should surface the
 *neglected* PRs, not the fresh ones) and classifies each deterministically: skip
@@ -98,7 +110,7 @@ one workflow where a wrong call is dangerous (auto-merge).
 - **Every safety decision is deterministic and unit-tested** (`bump.py`,
   `policy.py`, `triage.py`, `hygiene.py`) — verifiable and reproducible, not a
   model guess, and the triage rules are **backtested against real maintainer
-  labels (94%)**. **22 tests.**
+  labels (94% precision) and real duplicate pairs (2/3 recall)**. **23 tests.**
 - **Reproducible:** data is cached to `samples/`; LLM calls use a fixed seed;
   `idle_days` is frozen at fetch time.
 - Reuses the tool-calling agent pattern and Claude-Code-style skill I built for a
