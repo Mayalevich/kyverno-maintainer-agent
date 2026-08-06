@@ -96,11 +96,17 @@ def find_duplicates(issue: Issue, others: list[Issue], threshold: float = 0.5) -
     return out
 
 
+def body_incomplete(body: str) -> bool:
+    """A bug body is thin if it's short or has no repro/version vocabulary. Kept as
+    a pure predicate so the completeness check can be backtested on its own."""
+    return len(body) < 500 or not _STEPS.search(body)
+
+
 def triage(issue: Issue, others: list[Issue]) -> TriageSuggestion:
     labels = suggest_labels(issue)
     dups = find_duplicates(issue, others)
     is_bug = bool(re.search(r"\[bug\]|\bbug\b", issue.title, re.I))
-    needs_info = is_bug and (len(issue.body) < 500 or not _STEPS.search(issue.body))
+    needs_info = is_bug and body_incomplete(issue.body)
     bits = []
     if labels:
         bits.append(f"suggest labels {labels}")

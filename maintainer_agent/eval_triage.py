@@ -15,7 +15,7 @@ from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
-from .triage import Issue, find_duplicates, suggest_area
+from .triage import Issue, body_incomplete, find_duplicates, suggest_area
 
 CACHE = Path(__file__).resolve().parent.parent / "samples"
 AREAS = ["type:controller", "type:cli", "imageVerify"]
@@ -167,14 +167,75 @@ def render_dup(d: DupResult, pairs: list[dict]) -> str:
     ])
 
 
+# --- completeness-check grounding -------------------------------------------
+# There is no clean maintainer label for "incomplete bug report" (the `question`
+# label is mostly usage questions). So instead of over-claiming a precision, we
+# measure the honest thing we *can*: specificity. A bug closed as COMPLETED was
+# clearly actionable/complete enough to fix, so the check should stay quiet on it.
+
+def fetch_closed_bugs(repo: str, limit: int = 400) -> list[dict]:
+    out = subprocess.run(
+        ["gh", "issue", "list", "-R", repo, "--state", "closed", "--label", "bug",
+         "--limit", str(limit), "--json", "number,title,body,stateReason"],
+        capture_output=True, text=True, check=True).stdout
+    return [{"number": i["number"], "title": i["title"], "body": i.get("body") or "",
+             "stateReason": i["stateReason"]} for i in json.loads(out)]
+
+
+def eval_completeness(bugs: list[dict]) -> dict:
+    """Fire-rate of the completeness check per close reason. Specificity is measured
+    on COMPLETED (fixed => was complete); the check should mostly stay quiet."""
+    by: dict[str, list[bool]] = {}
+    for b in bugs:
+        by.setdefault(b["stateReason"], []).append(body_incomplete(b["body"]))
+    stats = {k: {"n": len(v), "fired": sum(v)} for k, v in by.items()}
+    comp = stats.get("COMPLETED", {"n": 0, "fired": 0})
+    specificity = 1 - comp["fired"] / comp["n"] if comp["n"] else 0.0
+    return {"by_reason": stats, "specificity": specificity}
+
+
+def cache_closed_bugs(bugs: list[dict]) -> Path:
+    CACHE.mkdir(parents=True, exist_ok=True)
+    out = CACHE / "closed_bugs.json"
+    out.write_text(json.dumps(bugs, indent=2), encoding="utf-8")
+    return out
+
+
+def load_closed_bugs() -> list[dict]:
+    return json.loads((CACHE / "closed_bugs.json").read_text(encoding="utf-8"))
+
+
+def render_completeness(c: dict) -> str:
+    rows = "\n".join(f"- {k}: fires on {s['fired']}/{s['n']} = {s['fired']/s['n']:.0%}"
+                     for k, s in sorted(c["by_reason"].items()))
+    return "\n".join([
+        "", "## Completeness-check grounding (honest limits of the ground truth)", "",
+        "Unlike labels and duplicates, Kyverno has **no clean signal for 'incomplete "
+        "bug report'** — the `question` label is mostly usage questions. So rather than "
+        "invent a precision number, I measure **specificity** against a clean class: a "
+        "bug closed as COMPLETED was actionable enough to be fixed, so the check should "
+        "stay quiet on it.", "", "Fire-rate of the completeness check by close reason:",
+        rows, "",
+        f"- **Specificity {c['specificity']:.0%}**: on real fixed bugs the check stays "
+        "quiet, so it won't nag maintainers on well-formed reports. Notably NOT_PLANNED "
+        "bugs are *not* a cleaner 'incomplete' class (they're ~99% complete — abandoned "
+        "for other reasons), which is why I don't claim a recall number here. Knowing "
+        "the ground truth can't support a stronger claim is the point.",
+    ])
+
+
 def run_eval(repo: str = "kyverno/kyverno", per_label: int = 60) -> int:
     issues = fetch_labelled(repo, per_label)
     cache_dataset(issues)
     r = evaluate(issues)
     pairs = load_dup_pairs()
     d = eval_duplicates(pairs, issues)
-    (CACHE / "eval_report.md").write_text(render(r) + "\n" + render_dup(d, pairs),
-                                          encoding="utf-8")
+    bugs = fetch_closed_bugs(repo)
+    cache_closed_bugs(bugs)
+    c = eval_completeness(bugs)
+    (CACHE / "eval_report.md").write_text(
+        render(r) + "\n" + render_dup(d, pairs) + "\n" + render_completeness(c),
+        encoding="utf-8")
     print(f"  label backtest: {r.total} issues, coverage {r.coverage:.0%}, "
           f"precision {r.precision:.0%}")
     if r.confusion:
@@ -183,5 +244,7 @@ def run_eval(repo: str = "kyverno/kyverno", per_label: int = 60) -> int:
           f"={d.recall:.0%}, false-positives {d.false_positives}/{d.pool_size}")
     if d.missed:
         print("    dup misses (semantic):", d.missed)
+    print(f"  completeness: specificity {c['specificity']:.0%} on "
+          f"{c['by_reason'].get('COMPLETED', {}).get('n', 0)} fixed bugs")
     print(f"-> {CACHE/'eval_report.md'}")
     return 0

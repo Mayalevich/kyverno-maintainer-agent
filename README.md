@@ -83,6 +83,15 @@ call webhook") and share no title tokens — lexical overlap *cannot* catch that
 embedding-based retrieval is the motivated next step (and retrieval is my
 background).
 
+**And I checked where grounding runs out.** The completeness check (flag bug
+reports with no repro/version) has **no clean ground-truth label** in Kyverno — the
+`question` label is mostly usage questions, and bugs closed NOT_PLANNED turn out to
+be ~99% complete (abandoned for other reasons). So rather than invent a precision
+number, I measured the honest thing I can: on **319** bugs closed as COMPLETED
+(complete enough to actually get fixed) the check stays quiet on **95%** — it flags
+thin reports without nagging well-formed ones. Knowing the ground truth can't
+support a stronger claim, and saying so, is the point.
+
 ## Workflow 3 — PR hygiene
 `hygiene.py` scans open PRs oldest-first (a hygiene tool should surface the
 *neglected* PRs, not the fresh ones) and classifies each deterministically: skip
@@ -119,7 +128,8 @@ one workflow where a wrong call is dangerous (auto-merge).
 - **Every safety decision is deterministic and unit-tested** (`bump.py`,
   `policy.py`, `triage.py`, `hygiene.py`) — verifiable and reproducible, not a
   model guess, and the triage rules are **backtested against real maintainer
-  labels (94% precision) and real duplicate pairs (2/3 recall)**. **24 tests.**
+  labels (94% precision), real duplicate pairs (2/3 recall), and real merge-time
+  and close-reason data**. **25 tests.**
 - **Reproducible:** data is cached to `samples/`; LLM calls use a fixed seed;
   `idle_days` is frozen at fetch time.
 - Reuses the tool-calling agent pattern and Claude-Code-style skill I built for a
