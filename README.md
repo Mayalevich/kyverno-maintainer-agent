@@ -61,6 +61,16 @@ Output is a draft — labels a maintainer confirms, never applied. Ran on 10 rea
 open issues; e.g. it proposes `type:cli` on the CLI bug #16946 and `bug` on the
 unlabelled #16949.
 
+**It's backtested, not just plausible** (`eval_triage.py`, `python -m
+maintainer_agent eval`). Kyverno maintainers have already area-labelled thousands
+of issues; treating those as ground truth, on **164** issues carrying exactly one
+area label the rules **agree with the maintainer's label 94% of the time** (151/161)
+and stay silent on the rest rather than guess (98% coverage). The remaining misses
+are genuinely ambiguous (an image bug reproduced via the CLI). One miss cluster the
+backtest exposed — image issues grabbed by the CLI rule — was fixed by reordering
+the rules, taking precision from 92% to 94%; a test locks the number in so it
+can't silently regress.
+
 ## Workflow 3 — PR hygiene
 `hygiene.py` scans open PRs oldest-first (a hygiene tool should surface the
 *neglected* PRs, not the fresh ones) and classifies each deterministically: skip
@@ -76,6 +86,7 @@ python -m maintainer_agent review                         # deterministic dep-PR
 python -m maintainer_agent agent --model qwen2.5:7b       # LLM agent + safety guard (needs ollama)
 python -m maintainer_agent triage                         # issue triage on live issues
 python -m maintainer_agent hygiene                        # PR-hygiene scan on live PRs
+python -m maintainer_agent eval                           # backtest triage vs real labels
 ```
 Every deterministic path needs no LLM; the agent adds the autonomous layer on the
 one workflow where a wrong call is dangerous (auto-merge).
@@ -86,7 +97,8 @@ one workflow where a wrong call is dangerous (auto-merge).
   auditable, revertible — the constraints the mentorship emphasizes.
 - **Every safety decision is deterministic and unit-tested** (`bump.py`,
   `policy.py`, `triage.py`, `hygiene.py`) — verifiable and reproducible, not a
-  model guess. **21 tests.**
+  model guess, and the triage rules are **backtested against real maintainer
+  labels (94%)**. **22 tests.**
 - **Reproducible:** data is cached to `samples/`; LLM calls use a fixed seed;
   `idle_days` is frozen at fetch time.
 - Reuses the tool-calling agent pattern and Claude-Code-style skill I built for a

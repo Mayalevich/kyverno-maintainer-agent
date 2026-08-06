@@ -14,10 +14,13 @@ from pathlib import Path
 
 CACHE = Path(__file__).resolve().parent.parent / "samples"
 
-# Keyword -> Kyverno area label. First match wins; order matters.
+# Keyword -> Kyverno area label. First match wins; order matters. Ordering was
+# tuned against the real-label backtest (see eval_triage): the specific image-
+# verification vocabulary is checked before the generic CLI rule, because an image
+# bug is often reproduced via `kyverno apply` yet is really an imageVerify issue.
 _AREA = [
-    (r"\bCLI\b|kyverno apply|kubectl kyverno", "type:cli"),
     (r"image ?validat|imageverif|cosign|image signature|attestation", "imageVerify"),
+    (r"\bCLI\b|kyverno apply|kubectl kyverno", "type:cli"),
     (r"\bCEL\b|mutatingpolicy|validatingpolicy", "type:controller"),
     (r"controller|background|reconcil|globalcontext", "type:controller"),
     (r"webhook|admission", "webhook"),
@@ -59,15 +62,23 @@ def _tokens(text: str) -> set[str]:
     return {w for w in re.findall(r"[a-z0-9]+", text.lower()) if len(w) > 3}
 
 
+def suggest_area(issue: Issue) -> str | None:
+    """The single area label the keyword rules predict, or None. First match wins."""
+    text = f"{issue.title}\n{issue.body}"
+    for pat, lab in _AREA:
+        if re.search(pat, text, re.I):
+            return lab
+    return None
+
+
 def suggest_labels(issue: Issue) -> list[str]:
     labels: list[str] = []
     text = f"{issue.title}\n{issue.body}"
     if re.search(r"\[bug\]|panic|crash|does not|doesn't|fails|incorrect", text, re.I):
         labels.append("bug")
-    for pat, lab in _AREA:
-        if re.search(pat, text, re.I):
-            labels.append(lab)
-            break
+    area = suggest_area(issue)
+    if area:
+        labels.append(area)
     # only suggest labels the issue doesn't already have
     return [lab for lab in labels if lab not in issue.labels]
 

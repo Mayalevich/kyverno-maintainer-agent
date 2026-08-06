@@ -105,6 +105,10 @@ def main(argv: list[str] | None = None) -> int:
     h.add_argument("--repo", default="kyverno/kyverno")
     h.add_argument("--limit", type=int, default=30)
 
+    e = sub.add_parser("eval", help="backtest the triage label-suggester vs real labels")
+    e.add_argument("--repo", default="kyverno/kyverno")
+    e.add_argument("--per-label", type=int, default=60)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "fetch":
@@ -119,6 +123,9 @@ def main(argv: list[str] | None = None) -> int:
         return _run_triage(args.repo, args.limit)
     if args.cmd == "hygiene":
         return _run_hygiene(args.repo, args.limit)
+    if args.cmd == "eval":
+        from .eval_triage import run_eval
+        return run_eval(args.repo, args.per_label)
     return _run_review()
 
 
