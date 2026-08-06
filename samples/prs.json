@@ -1,0 +1,180 @@
+[
+  {
+    "number": 16945,
+    "title": "fix: bump oras.land/oras-go/v2 to v2.6.2 to resolve CVE-2026-50163",
+    "author": "falloficaruss",
+    "ci": "green",
+    "files": [
+      "go.mod",
+      "go.sum"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16937,
+    "title": "chore(deps): bump github.com/sigstore/sigstore from 1.10.8 to 1.10.9",
+    "author": "app/dependabot",
+    "ci": "green",
+    "files": [
+      "go.mod",
+      "go.sum"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16936,
+    "title": "chore(deps): bump github.com/google/go-containerregistry from 0.21.7 to 0.21.8",
+    "author": "app/dependabot",
+    "ci": "green",
+    "files": [
+      "go.mod",
+      "go.sum"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16935,
+    "title": "chore(deps): bump the sigstore group across 1 directory with 4 updates",
+    "author": "app/dependabot",
+    "ci": "green",
+    "files": [
+      "go.mod",
+      "go.sum"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16934,
+    "title": "chore(deps): bump Homebrew/actions/limit-pull-requests from 2026.07.29.1 to 2026.08.03.1",
+    "author": "app/dependabot",
+    "ci": "green",
+    "files": [
+      ".github/workflows/pr-rate-limiter.yaml"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16933,
+    "title": "chore(deps): bump zgosalvez/github-actions-ensure-sha-pinned-actions from 5.0.4 to 5.0.6",
+    "author": "app/dependabot",
+    "ci": "red",
+    "files": [
+      ".github/workflows/check-sha-pinned-actions.yaml"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16932,
+    "title": "chore(deps): Upgrade robfig/cron to v3",
+    "author": "chimanjain",
+    "ci": "green",
+    "files": [
+      "api/kyverno/v2/cleanup_policy_types.go",
+      "api/kyverno/v2beta1/cleanup_policy_types.go",
+      "go.mod",
+      "go.sum"
+    ],
+    "mergeable": null
+  },
+  {
+    "number": 16915,
+    "title": "chore(deps): Upgrade gotest.tools to v3",
+    "author": "chimanjain",
+    "ci": "green",
+    "files": [
+      "api/kyverno/v1/clusterpolicy_test.go",
+      "api/kyverno/v1/image_verification_test.go",
+      "api/kyverno/v1/match_resources_test.go",
+      "api/kyverno/v1/policy_test.go",
+      "api/kyverno/v1/resource_description_test.go",
+      "api/kyverno/v1/rule_test.go",
+      "api/kyverno/v1/spec_test.go",
+      "api/kyverno/v1/user_info_test.go",
+      "api/kyverno/v2/cleanup_policy_test.go",
+      "api/kyverno/v2/match_resources_test.go",
+      "api/kyverno/v2beta1/cleanup_policy_test.go",
+      "api/kyverno/v2beta1/clusterpolicy_test.go",
+      "api/kyverno/v2beta1/image_verification_test.go",
+      "api/kyverno/v2beta1/match_resources_test.go",
+      "api/kyverno/v2beta1/policy_test.go",
+      "api/kyverno/v2beta1/resource_description_test.go",
+      "api/kyverno/v2beta1/rule_test.go",
+      "api/kyverno/v2beta1/spec_test.go",
+      "cmd/cli/kubectl-kyverno/processor/policy_processor_test.go",
+      "cmd/cli/kubectl-kyverno/processor/result_test.go",
+      "cmd/cli/kubectl-kyverno/report/report_test.go",
+      "cmd/cli/kubectl-kyverno/resource/duplicate_test.go",
+      "cmd/cli/kubectl-kyverno/test/load_test.go",
+      "cmd/cli/kubectl-kyverno/utils/common/common_test.go",
+      "go.mod",
+      "pkg/admissionpolicy/kyvernopolicy_checker_test.go",
+      "pkg/admissionpolicy/mutate_test.go",
+      "pkg/admissionpolicy/user_info_background_test.go",
+      "pkg/admissionpolicy/validate_test.go",
+      "pkg/autogen/v1/autogen_test.go",
+      "pkg/autogen/v2/autogen_test.go",
+      "pkg/background/generate/validate_test.go",
+      "pkg/cel/policies/dpol/engine/fetch_test.go",
+      "pkg/config/client_test.go",
+      "pkg/engine/apicall/apiCall_test.go",
+      "pkg/engine/apicall/executor_test.go",
+      "pkg/engine/apicall/httpclient_test.go",
+      "pkg/engine/attestation_test.go",
+      "pkg/engine/context/deferred_test.go",
+      "pkg/engine/context/loaders/configmap_test.go",
+      "pkg/engine/context/resolvers/resolvers_test.go",
+      "pkg/engine/factories/registryclientfactory_test.go",
+      "pkg/engine/forceMutate_test.go",
+      "pkg/engine/handlers/validation/validate_manifest_test.go",
+      "pkg/engine/handlers/validation/validate_pss_test.go",
+      "pkg/engine/image_verify_test.go",
+      "pkg/engine/jmespath/arithmetic_test.go",
+      "pkg/engine/jmespath/functions_test.go",
+      "pkg/engine/jmespath/time_test.go",
+      "pkg/engine/jmespath/utils_test.go",
+      "pkg/engine/jsonutils/traverse_test.go",
+      "pkg/engine/mixed_failureaction_test.go",
+      "pkg/engine/mutate/patch/strategicMergePatch_test.go",
+      "pkg/engine/mutate/patch/strategicPreprocessing_test.go",
+      "pkg/engine/mutation_test.go",
+      "pkg/engine/operator/operator_test.go",
+      "pkg/engine/pattern/pattern_test.go",
+      "pkg/engine/validate/validate_test.go",
+      "pkg/engine/validation_test.go",
+      "pkg/engine/variables/regex/vars_test.go",
+      "pkg/engine/variables/variables_test.go",
+      "pkg/engine/variables/vars_test.go",
+      "pkg/image/verifiers/cpol/cosign/cert_limit_test.go",
+      "pkg/image/verifiers/cpol/cosign/sigstore_test.go",
+      "pkg/image/verifiers/cpol/cosign/verifier_test.go",
+      "pkg/image/verifiers/cpol/notary/notary_test.go",
+      "pkg/image/verifiers/cpol/notary/repository_test.go",
+      "pkg/policy/generate/validate_test.go",
+      "pkg/policy/validate/validate_test.go",
+      "pkg/policycache/audit_warning_test.go",
+      "pkg/policycache/cache_test.go",
+      "pkg/pss/evaluate_test.go",
+      "pkg/utils/admission/resource_test.go",
+      "pkg/utils/api/image_test.go",
+      "pkg/utils/data/data_test.go",
+      "pkg/utils/json/utils_test.go",
+      "pkg/utils/kube/kind_test.go",
+      "pkg/utils/kube/version_test.go",
+      "pkg/utils/match/kind_test.go",
+      "pkg/validation/exception/globalcontext/validate_test.go",
+      "pkg/validation/exception/validate_test.go",
+      "pkg/validation/globalcontext/validate_test.go",
+      "pkg/validation/policy/allowed_vars_test.go",
+      "pkg/validation/policy/background_test.go",
+      "pkg/validation/policy/on_update_policy_test.go",
+      "pkg/validation/policy/validate_test.go",
+      "pkg/validation/resource/validate_test.go",
+      "pkg/webhooks/handlers/dump_test.go",
+      "pkg/webhooks/resource/handlers_test.go",
+      "pkg/webhooks/resource/imageverification/handler_test.go",
+      "pkg/webhooks/resource/updaterequest_test.go",
+      "pkg/webhooks/resource/validation_test.go"
+    ],
+    "mergeable": null
+  }
+]
